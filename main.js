@@ -3,6 +3,10 @@ const playerTwoScoreWrap = document.querySelector('#playerTwo-score');
 const boardWrapper = document.querySelector('.board-wrapper');
 const playerIndicator = document.querySelector('.player-indicator');
 const resetButton = document.querySelector('#resetBtn');
+const playerOneScore = document.querySelector('#playerOne-score');
+const playerTwoScore = document.querySelector('#playerTwo-score');
+const nameInputForm = document.querySelector('#name-input-form');
+
 
 let insaneMode = true;
 let currentTurn;
@@ -19,6 +23,33 @@ let playerTwo = {
     token: "O",
     score: 0
 }
+
+const randomNames = ["Bob", "Laquisha", "Jane", "Derp", "Ronald","Dude", "Thaddeus", "Ping", "Noot Noot", "Morty"]
+
+randomNameGenerator = () => {
+    playerTwo.name = randomNames[Math.floor(Math.random()*randomNames.length)];
+}
+const showGame = () => {
+    document.querySelector('.hero').style.visibility = "hidden";
+}
+
+nameInputForm.addEventListener('submit',function(event){
+    event.preventDefault()
+    if ((document.querySelector('input').value).length > 0) {
+        playerOne.name = document.querySelector('input').value;
+        document.querySelector('.carousel-control-next-icon').click();
+        const startGameBtn = document.createElement('button');
+        startGameBtn.setAttribute('id', 'start-game-btn')
+        startGameBtn.textContent = 'Player 2 Accepts Their Name';
+        document.querySelectorAll('.carousel-item')[1].appendChild(startGameBtn);
+        startGameBtn.addEventListener('click', showGame);
+    }
+    randomNameGenerator();
+    document.querySelector('#player-two-name').textContent = `Player two, no-one really cares what your name is. So from now on, you'll just be referred to as...${playerTwo.name}.`
+})
+
+
+
 
 
 const switchPlayer = () =>{
@@ -42,11 +73,6 @@ switchPlayer();
 function takeTurn () {
     switchPlayer()
     turnCount++;
-    // turnCount % 2 !== 0?currentTurn = playerOne :currentTurn = playerTwo;
-    // playerIndicator.classList.toggle("player-indicator--player2");
-    // playerOneScoreWrap.classList.toggle('player_wrap--active');
-    // playerTwoScoreWrap.classList.toggle('player_wrap--active');
-    
     event.target.removeEventListener('click', takeTurn); 
     let token = document.createElement('p');
     token.textContent = currentTurn.token;
@@ -188,6 +214,8 @@ const checkWinningConditions = () => {
             boardWrapper.classList.add('board-wrapper--complete');
             boardWrapper.textContent = `${currentTurn.name} wins`;
             console.log(currentTurn.score)
+            playerOneScore.textContent = `${playerOne.name}: ${playerOne.score}`;
+            playerTwoScore.textContent = `${playerTwo.name}: ${playerTwo.score}`;
         }
     });
     
