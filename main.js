@@ -1,67 +1,107 @@
+const playerOneScoreWrap = document.querySelector('#playerOne-score');
+const playerTwoScoreWrap = document.querySelector('#playerTwo-score');
+const boardWrapper = document.querySelector('.board-wrapper');
+const playerIndicator = document.querySelector('.player-indicator');
+const resetButton = document.querySelector('#resetBtn');
+
 let insaneMode = true;
 let currentTurn;
 let turnCount = 0;
 
 let playerOne = {
     name: "Josh",
-    token: "X"
+    token: "X",
+    score: 0,
 }
 
 let playerTwo = {
     name: "test",
-    token: "O"
+    token: "O",
+    score: 0
 }
 
 
+const switchPlayer = () =>{
+    if (turnCount % 2 === 0 ){
+        currentTurn = playerOne
+        playerOneScoreWrap.classList.add('player_wrap--active');
+        playerIndicator.classList.remove("player-indicator--player2");
+        playerTwoScoreWrap.classList.remove('player_wrap--active');
+        
+    } else {
+        currentTurn = playerTwo;
+        playerIndicator.classList.remove("player-indicator--player2");
+        playerIndicator.classList.add("player-indicator--player2");
+        playerOneScoreWrap.classList.remove('player_wrap--active');
+        playerTwoScoreWrap.classList.add('player_wrap--active');
+    }
+}
+
+switchPlayer();
 
 function takeTurn () {
+    switchPlayer()
     turnCount++;
-    turnCount % 2 !== 0 ? currentTurn = playerOne:currentTurn = playerTwo;
+    // turnCount % 2 !== 0?currentTurn = playerOne :currentTurn = playerTwo;
+    // playerIndicator.classList.toggle("player-indicator--player2");
+    // playerOneScoreWrap.classList.toggle('player_wrap--active');
+    // playerTwoScoreWrap.classList.toggle('player_wrap--active');
+    
     event.target.removeEventListener('click', takeTurn); 
     let token = document.createElement('p');
     token.textContent = currentTurn.token;
     event.target.dataset.click = currentTurn.name;
     this.appendChild(token);
-
     checkWinningConditions();
 }
 
 
 const createBoard = () => {
     for (let i = 0; i < 9; i ++){
-        const boardGrid = document.querySelector('.board-wrapper');
         const boardGridItem = document.createElement('div');
         boardGridItem.classList.add('board__grid-item');
         if (!insaneMode) {
             boardGridItem.addEventListener('click', takeTurn);
         }
-        boardGrid.appendChild(boardGridItem);
+        boardWrapper.appendChild(boardGridItem);
     }
 }
 
 
 createBoard();
 
-const pureBoardGridItems = document.querySelectorAll('.board__grid-item')
-const boardGridItems = Array.from(pureBoardGridItems);
-
+let pureBoardGridItems = document.querySelectorAll('.board__grid-item')
+let boardGridItems = Array.from(pureBoardGridItems);
 
 
 const createMiniBoard = () => {
+    pureBoardGridItems = document.querySelectorAll('.board__grid-item')
+    boardGridItems = Array.from(pureBoardGridItems);
+
     boardGridItems.forEach(function(el){
         for (let i = 0; i < 9; i ++){
             const miniBoardGridItem = document.createElement('div');
+            
             miniBoardGridItem.classList.add('board__grid-item--mini');
             el.appendChild(miniBoardGridItem);
             if (insaneMode) {
                 miniBoardGridItem.addEventListener('click', takeTurn);
             }
-            
         }
     })
+    
 };
 
 createMiniBoard();
+
+
+const resetGame = () => {
+    boardWrapper.innerHTML ="";
+    createBoard();
+    createMiniBoard();
+    turnCount = 0;
+    switchPlayer();
+};
 
 const pureMiniBoardGridItems = document.querySelectorAll('.board__grid-item--mini')
 const miniBoardGridItems = Array.from(pureMiniBoardGridItems);
@@ -72,6 +112,7 @@ const miniBoardArr = () => {
     }
     return arr;
 }
+
 
 
 //returns an array with all the combinations
@@ -128,13 +169,14 @@ const checkWinningConditions = () => {
         el.generateWinningConditions().forEach(function(el,index,arr){
             if(el.every(e => e.textContent === el[0].textContent && e.textContent.length > 0)){
                 console.log(`${currentTurn.name} wins`);
-                console.log(arr);
                 arr.forEach(function(el){
                    el.forEach(function(e){
                         e.textContent = "";
                    })
                 })
+                arr[0][0].parentNode.classList.add("board__grid-item--complete")
                 arr[0][0].parentNode.textContent = `${currentTurn.token}`;
+                
             }
         });
     })
@@ -142,10 +184,14 @@ const checkWinningConditions = () => {
         if(el.every(e => e.textContent === el[0].textContent && e.textContent.length > 0)){
             boardGridItems[index].innerHTML = `${currentTurn.token}`;
             console.log(`${currentTurn.name} wins all`);
-            
+            currentTurn.score ++;
+            boardWrapper.classList.add('board-wrapper--complete');
+            boardWrapper.textContent = `${currentTurn.name} wins`;
+            console.log(currentTurn.score)
         }
     });
     
 }
 
 
+resetButton.addEventListener('click', resetGame)

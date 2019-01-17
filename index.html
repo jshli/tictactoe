@@ -5,21 +5,39 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- style stuff-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+   
     
 </head>
 <body>
-    <div class='board-wrapper'>
-        <!-- <div class="board__grid"></div>
-        <div class="board__grid-item"></div>
-        <div class="board__grid-item"></div>
-        <div class="board__grid-item"></div>
-        <div class="board__grid-item"></div>
-        <div class="board__grid-item"></div>
-        <div class="board__grid-item"></div>
-        <div class="board__grid-item"></div>
-        <div class="board__grid-item"></div> -->
-    </div>
-    <script src="main.js"></script>
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h1>Let's play m*fkn Tic Tac Toe</h1>
+                    <button id="resetBtn">Restart</button>   
+                </div>
+                <div class = "col">
+                        <div class="score-board__wrap">
+                            <div id="playerOne-score" class="player__wrap player_wrap--active">
+                                Player 1: 0
+                                <div class="player-indicator"></div>
+                            </div>
+                            <div id="playerTwo-score" class="player__wrap">
+                                Player 2: 0
+                            </div>
+                        </div>
+                        <!--Board is here-->
+                        <div class='board-wrapper'></div>
+                        <script src="main.js"></script>
+                </div>
+            </div>
+    </div>  
+    </section>
+    
+    
 </body>
 </html>
