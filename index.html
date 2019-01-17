@@ -27,7 +27,11 @@
                             </form>
                       </div>
                       <div class="carousel-item">
-                            <p id="player-two-name">Player One, what's your fucking name?</p>
+                            <p id="player-two-name"></p>
+                            <p>Now, select your mode.</p>
+                            <div class="mode-btn__wrap">
+                                <button id="normal-mode__btn">Normal</button><button id="ninex-mode__btn">9x9</button><button id="blind-mode__btn">Blind</button>
+                            </div>
                       </div>
 
                     </div>
@@ -50,15 +54,15 @@
                     <h1>Let's play motherfucking Tic Tac Toe</h1>
                     <button id="resetBtn">Restart</button>   
                 </div>
-                <div class = "col">
+                <div class="col board__col">
                         <div class="score-board__wrap">
                             <div id="playerOne-score" class="player__wrap player_wrap--active">
                                 Player 1: 0
-                                <div class="player-indicator"></div>
                             </div>
                             <div id="playerTwo-score" class="player__wrap">
                                 Player 2: 0
                             </div>
+                            <div class="player-indicator"></div>
                         </div>
                         <!--Board is here-->
                         <div class='board-wrapper'></div>

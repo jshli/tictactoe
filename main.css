@@ -1,8 +1,9 @@
 :root {
     --light-blue: #6dcff6;
+
 }
 
-h1, input, p, button {
+h1, input, p, button, .board__grid-item{
     font-family: 'Montserrat', sans-serif;
 
 }
@@ -22,34 +23,31 @@ h1, input, p, button {
     font-size: 5em;
 }
 
+
 .board__grid-item {
     display:grid;
-    grid-template-columns: repeat(3, 1fr)
+    grid-template-columns: repeat(3, 1fr);
+    transition: all ease 0.3s;
 }
 
-.board__grid-item:first-child{
-    border-right: 4px solid #333;
+
+.board__grid-item:first-child, .board__grid-item:nth-child(2), .board__grid-item:nth-child(3){
     border-bottom: 4px solid #333
 }
 
-.board__grid-item:nth-child(3){
-    border-left: 4px solid #333;
-    border-bottom: 4px solid #333
-}
-
-.board__grid-item:nth-child(7){
+.board__grid-item:nth-child(4), .board__grid-item:first-child, .board__grid-item:nth-child(7){
     border-right: 4px solid #333;
-    border-top: 4px solid #333
 }
 
-.board__grid-item:last-child{
+.board__grid-item:nth-child(6), .board__grid-item:last-child, .board__grid-item:nth-child(3){
     border-left: 4px solid #333;
+}
+
+
+.board__grid-item:nth-child(8), .board__grid-item:nth-child(7), .board__grid-item:last-child{
     border-top: 4px solid #333
 }
 
-.board__grid-item:nth-child(5){
-    outline:4px solid #333;
-}
 
 
 .board__grid-item--complete {
@@ -57,6 +55,8 @@ h1, input, p, button {
     justify-content: center;
     align-items: center;
     font-size: 2rem;
+    font-weight: 800;
+    color: white;
 }
 
 .board__grid-item--mini {
@@ -64,32 +64,28 @@ h1, input, p, button {
     justify-content: center;
     align-items: center;
     flex-wrap:wrap;
-    
+    transition: all ease-out 0.2s;
 }
 
-.board__grid-item--mini:first-child{
-    border-right: 2px solid #ccc;
+
+.board__grid-item--mini:first-child, .board__grid-item--mini:nth-child(2), .board__grid-item--mini:nth-child(3){
     border-bottom: 2px solid #ccc
 }
 
-.board__grid-item--mini:nth-child(3){
-    border-left: 2px solid #ccc;
-    border-bottom: 2px solid #ccc
-}
-
-.board__grid-item--mini:nth-child(7){
+.board__grid-item--mini:nth-child(4), .board__grid-item--mini:first-child, .board__grid-item--mini:nth-child(7){
     border-right: 2px solid #ccc;
-    border-top: 2px solid #ccc
 }
 
-.board__grid-item--mini:last-child{
+.board__grid-item--mini:nth-child(6), .board__grid-item--mini:last-child, .board__grid-item--mini:nth-child(3){
     border-left: 2px solid #ccc;
+}
+
+
+.board__grid-item--mini:nth-child(8), .board__grid-item--mini:nth-child(7), .board__grid-item--mini:last-child{
     border-top: 2px solid #ccc
 }
 
-.board__grid-item--mini:nth-child(5){
-    outline:2px solid #ccc;
-}
+
 
 section { 
     height: 100vh;
@@ -99,17 +95,21 @@ section {
 }
 
 h1 {
-    
     font-weight: 900;
     text-transform: uppercase;
+    margin-bottom: 2rem;
 }
 
 .col {
     display: flex;
-    align-items: center;
-    justify-content: flex-start;
+    align-items: flex-start;
+    justify-content: center;
     align-content: center;
     flex-direction: column;
+}
+
+.board__col {
+    align-items: center;
 }
 
 .board-wrapper  p {
@@ -125,6 +125,10 @@ h1 {
     margin-bottom: 2rem;
 }
 
+.player__wrap {
+    text-align: center;
+}
+
 .player_wrap--active {
     color:var(--light-blue);
     font-weight: 800;
@@ -136,13 +140,11 @@ h1 {
     height: 4px;
     border-radius: 100px;
     background-color: var(--light-blue);
-    
-    ;
     transition: all ease-out 0.5s
 }
 
 .player-indicator--player2 {
-    transform: translateX(142%);
+    transform: translateX(135%);
 }
 
 .hero {
@@ -169,7 +171,7 @@ i {
 }
 
 .carousel {
-    min-height: 200px;
+    min-height: 100px;
     padding-top: 3rem;
     padding-bottom: 3rem;
 }
@@ -197,6 +199,7 @@ button {
     text-transform: capitalize;
     font-weight: 800;
     cursor: pointer;
+    margin: 1rem;
 }
 
 button:hover {
