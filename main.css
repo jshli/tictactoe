@@ -106,7 +106,8 @@ section {
 h1 {
     font-weight: 900;
     text-transform: uppercase;
-    margin-bottom: 2rem;
+    margin-top: 1rem;
+
 }
 
 .col {
