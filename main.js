@@ -8,10 +8,29 @@ const playerTwoScore = document.querySelector('#playerTwo-score');
 const nameInputForm = document.querySelector('#name-input-form');
 const normalModeBtn = document.querySelector('#normal-mode__btn');
 const nineXModeBtn = document.querySelector('#ninex-mode__btn');
-const blindModeBtn = document.querySelector('#blind-mode__btn')
+const blindModeBtn = document.querySelector('#blind-mode__btn');
+const gameStatusHeader = document.querySelector('#game-instructions__header');
+const scoreBoardWrap = document.querySelector('.score-board__wrap');
+const newGameBtn = document.querySelector('#new-game-btn');
+const settingsPage = document.querySelector('#settings-section');
 
-let nineXNineMode = false;
-let blindMode = false;
+
+const gameModes = [
+    {
+        name:"normal", 
+        instructions: "Just normal fucking tic tac toe. Get three in a row to win."
+    },
+    {
+        name:"nineXNine",
+        instructions: "Win a small box to claim a big box. Get three big boxes in a row. Fucking easy."
+    },
+    {
+        name: "blind",
+        instructions:"Let's see you try winning when you can't see shit."
+    }
+];
+
+let currentMode;
 let currentTurn;
 let turnCount = 0;
 
@@ -28,7 +47,6 @@ let playerTwo = {
     score: 0,
     color: "#F7869C"
 }
-
 
 
 const randomNames = ["Bob", "Laquisha", "Jane", "Derp", "Ronald","Dude", "Thaddeus", "Ping", "Noot Noot", "Morty"]
@@ -58,14 +76,11 @@ const switchPlayer = () =>{
         playerTwoScoreWrap.classList.remove('player_wrap--active');
     } else {
         currentTurn = playerTwo;
-        playerIndicator.classList.remove("player-indicator--player2");
         playerIndicator.classList.add("player-indicator--player2");
         playerOneScoreWrap.classList.remove('player_wrap--active');
         playerTwoScoreWrap.classList.add('player_wrap--active');
     }
 }
-
-switchPlayer();
 
 
 function takeTurn () {
@@ -75,7 +90,7 @@ function takeTurn () {
     token.textContent = currentTurn.token;
     event.target.dataset.click = currentTurn.name;
     this.appendChild(token);
-    if(!nineXNineMode){
+    if(currentMode === gameModes[1]){
         this.style.backgroundColor = currentTurn.color;
     }
     checkWinningConditions();
@@ -87,7 +102,7 @@ const createBoard = () => {
     for (let i = 0; i < 9; i ++){
         const boardGridItem = document.createElement('div');
         boardGridItem.classList.add('board__grid-item');
-        if (!nineXNineMode) {
+        if (currentMode !== gameModes[1]) {
             boardGridItem.addEventListener('click', takeTurn);
             boardGridItem.classList.add("board__grid-item--complete")
         }
@@ -95,14 +110,43 @@ const createBoard = () => {
     }
 }
 
-createBoard();
+
 
 let pureBoardGridItems = document.querySelectorAll('.board__grid-item')
 let boardGridItems = Array.from(pureBoardGridItems);
 
-const gridItemsMouse = () => {
+const createMiniBoard = () => {
     pureBoardGridItems = document.querySelectorAll('.board__grid-item')
-    if(!nineXNineMode) {
+    boardGridItems = Array.from(pureBoardGridItems);
+    boardGridItems.forEach(function(el){
+        for (let i = 0; i < 9; i ++){
+            const miniBoardGridItem = document.createElement('div');
+            miniBoardGridItem.classList.add('board__grid-item--mini');
+            el.appendChild(miniBoardGridItem);
+            if (currentMode === gameModes[1]) {
+                miniBoardGridItem.addEventListener('click', takeTurn);
+            }
+        }
+    }) 
+};
+
+
+let pureMiniBoardGridItems = document.querySelectorAll('.board__grid-item--mini')
+let miniBoardGridItems = Array.from(pureMiniBoardGridItems);
+const miniBoardArr = () => {
+    let arr = [];
+    for (let i = 0; i < miniBoardGridItems.length; i += 9) {
+        arr.push(miniBoardGridItems.slice(i, i+9))
+    }
+    return arr;
+}
+
+
+
+const gridItemsMouse = () => {
+    pureBoardGridItems = document.querySelectorAll('.board__grid-item');
+    boardGridItems = Array.from(pureBoardGridItems);
+    if(currentMode !== gameModes[1]) {
         pureBoardGridItems.forEach(function(el){
             el.addEventListener("mouseover", function(event){
                 if(this.textContent.length === 0 ){
@@ -116,70 +160,35 @@ const gridItemsMouse = () => {
         pureBoardGridItems.forEach(function(el){
             el.addEventListener("mouseout", function(event){
                 this.style.borderColor = "#333";
-                if(this.textContent.length ===0 || blindMode ){
+                if(this.textContent.length ===0 || currentMode == gameModes[2]){
                     this.style.backgroundColor = "white";
                 }
                 this.style.transform = "none";
                 this.style.boxShadow= "none"
             })
         })
-    }
-    
-}
-
-gridItemsMouse();
-
-
-
-const createMiniBoard = () => {
-    pureBoardGridItems = document.querySelectorAll('.board__grid-item')
-    boardGridItems = Array.from(pureBoardGridItems);
-    boardGridItems.forEach(function(el){
-        for (let i = 0; i < 9; i ++){
-            const miniBoardGridItem = document.createElement('div');
-            miniBoardGridItem.classList.add('board__grid-item--mini');
-            el.appendChild(miniBoardGridItem);
-            if (nineXNineMode) {
-                miniBoardGridItem.addEventListener('click', takeTurn);
+    } 
+    pureMiniBoardGridItems = document.querySelectorAll('.board__grid-item--mini');
+    miniBoardGridItems = Array.from(pureMiniBoardGridItems);
+    pureMiniBoardGridItems.forEach(function(el){
+        el.addEventListener("mouseover", function(event){
+            if(this.textContent.length === 0){
+                this.style.backgroundColor = currentTurn.color;
+                this.style.borderColor = currentTurn.color;
+                this.style.transform = "scale(1.3 ,1.3);"
+                currentTurn === playerOne ? this.style.boxShadow= "0 0 40px rgba(109, 207, 246, 0.8)" : this.style.boxShadow= "0 0 40px rgba(247, 134, 156, 0.8)"
             }
-        }
+        })
     })
-    
-};
-
-if (nineXNineMode) {
-    createMiniBoard();
+    pureMiniBoardGridItems.forEach(function(el){
+        el.addEventListener("mouseout", function(event){
+            this.style.backgroundColor = "white";
+            this.style.borderColor = "#ccc";
+            this.style.transform = "none";
+            this.style.boxShadow= "none"
+        })
+    })
 }
-
-
-const pureMiniBoardGridItems = document.querySelectorAll('.board__grid-item--mini')
-const miniBoardGridItems = Array.from(pureMiniBoardGridItems);
-const miniBoardArr = () => {
-    let arr = [];
-    for (let i = 0; i < miniBoardGridItems.length; i += 9) {
-        arr.push(miniBoardGridItems.slice(i, i+9))
-    }
-    return arr;
-}
-
-pureMiniBoardGridItems.forEach(function(el){
-    el.addEventListener("mouseover", function(event){
-        if(this.textContent.length === 0){
-            this.style.backgroundColor = currentTurn.color;
-            this.style.borderColor = currentTurn.color;
-            this.style.transform = "scale(1.3 ,1.3);"
-            currentTurn === playerOne ? this.style.boxShadow= "0 0 40px rgba(109, 207, 246, 0.8)" : this.style.boxShadow= "0 0 40px rgba(247, 134, 156, 0.8)"
-        }
-    })
-})
-pureMiniBoardGridItems.forEach(function(el){
-    el.addEventListener("mouseout", function(event){
-        this.style.backgroundColor = "white";
-        this.style.borderColor = "#ccc";
-        this.style.transform = "none";
-        this.style.boxShadow= "none"
-    })
-})
 
 
 //returns an array with all the combinations
@@ -227,11 +236,13 @@ Array.prototype.generateWinningConditions = function () {
 
 
 const checkWinningConditions = () => {
-   if(nineXNineMode){
+    if(currentMode === gameModes[1]){
+        pureMiniBoardGridItems = document.querySelectorAll('.board__grid-item--mini')
+        miniBoardGridItems = Array.from(pureMiniBoardGridItems);
         miniBoardArr().forEach(function(el){
             el.generateWinningConditions().forEach(function(el,index,arr){
                 if(el.every(e => e.textContent === el[0].textContent && e.textContent.length > 0)){
-                    console.log(`${currentTurn.name} wins`);
+                    console.log(arr);
                     arr.forEach(function(el){
                         el.forEach(function(e){
                                 e.textContent = "";
@@ -243,51 +254,79 @@ const checkWinningConditions = () => {
                 }
             });
         })
-   }
+    }
    
     boardGridItems.generateWinningConditions().forEach(function(el,index,arr){
-        if(el.every(e => e.textContent === el[0].textContent && e.textContent.length > 0)){
+        if(el.every(e => e.textContent === el[0].textContent && e.textContent.length > 0 && e.classList.contains('board__grid-item--complete'))){
             boardGridItems[index].innerHTML = `${currentTurn.token}`;
             console.log(`${currentTurn.name} wins all`);
             currentTurn.score ++;
             boardWrapper.classList.add('board-wrapper--complete');
-            boardWrapper.textContent = `${currentTurn.name} wins`;
+            gameStatusHeader.textContent = `${currentTurn.name} wins. Now run that shit again.`;
+            boardWrapper.style.backgroundColor = currentTurn.color;
+            boardWrapper.textContent = `${currentTurn.token}`;
             console.log(currentTurn.score)
             playerOneScore.textContent = `${playerOne.name}: ${playerOne.score}`;
             playerTwoScore.textContent = `${playerTwo.name}: ${playerTwo.score}`;
-        }
+        } 
+        
     });
-    
+    if (boardGridItems.every(e => e.textContent.length > 0)){
+        gameStatusHeader.textContent = `Well shit, it's a tie.`
+    }
 }
 
 const startGame = () => {
+    turnCount = 0;
+    boardWrapper.classList.remove('board-wrapper--complete')
+    boardWrapper.style.backgroundColor = "white";
+    boardWrapper.innerHTML ="";
+    playerOne.score = 0;
+    playerTwo.score = 0;
+    switchPlayer();
+    createBoard();
+    if (currentMode === gameModes[1]) {
+        createMiniBoard();
+    }
+    scoreBoardWrap.appendChild(playerIndicator);
+    gridItemsMouse();
     document.querySelector('.hero').style.visibility = "hidden";
     playerOneScore.textContent = `${playerOne.name}: ${playerOne.score}`;
     playerTwoScore.textContent = `${playerTwo.name}: ${playerTwo.score}`;
-    playerOneScore.appendChild(playerIndicator);
+    gameStatusHeader.textContent = `${currentMode.instructions}`;
 }
 
-document.querySelector('#normal-mode__btn').addEventListener('click', startGame)
-document.querySelector('#ninex-mode__btn').addEventListener('click', function(){
-    nineXNineMode = true;
+
+
+document.querySelector('#normal-mode__btn').addEventListener('click', function(){
+    currentMode = gameModes[0];
     startGame();
+})
+document.querySelector('#ninex-mode__btn').addEventListener('click', function(){
+    currentMode = gameModes[1];
+    startGame();
+    
 });
 document.querySelector('#blind-mode__btn').addEventListener('click', function(){
-    blindMode = true;
+    currentMode = gameModes[2];
     startGame();
 })
 
 const resetGame = () => {
     boardWrapper.classList.remove('board-wrapper--complete')
+    boardWrapper.style.backgroundColor = "white";
     boardWrapper.innerHTML ="";
     createBoard();
-    gridItemsMouse();
-    if (nineXNineMode) {
+    if (currentMode === gameModes[1]) {
         createMiniBoard();
     }
+    gridItemsMouse();
+    gameStatusHeader.textContent = currentMode.instructions;
     turnCount = 0;
     switchPlayer();
 };
 
-
 resetButton.addEventListener('click', resetGame)
+// newGameBtn.addEventListener('click', function(){
+//     startGame();
+// });
