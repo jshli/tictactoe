@@ -256,7 +256,7 @@ button:focus {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border-right:none;
-};
+}
 
 .mode-switch:last-child {
     border-top-right-radius: 10px;
