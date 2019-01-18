@@ -260,7 +260,7 @@ button:focus {
 
 .mode-switch:last-child {
     border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-bottom-right-radius: 10px ;
     border-left: none;
 }
 
@@ -283,7 +283,8 @@ button:focus {
 }
 
 .settings-btn:hover {
-    transform: rotateX(360);
+    transform: rotateY(360deg);
+    transform-origin: center;
     color: grey;
     background: none;
 
