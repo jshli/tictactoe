@@ -294,7 +294,9 @@ const checkWinningConditions = () => {
     }
    
     boardGridItems.generateWinningConditions().forEach(function(el,index,arr){
-        if(el.every(e => e.textContent === el[0].textContent && e.textContent.length > 0 && e.classList.contains('board__grid-item--complete'))){
+        if (boardGridItems.every(e => e.textContent.length > 0)){
+            gameStatusHeader.textContent = `Well shit, it's a tie.`
+        } else if(el.every(e => e.textContent === el[0].textContent && e.textContent.length > 0 && e.classList.contains('board__grid-item--complete'))){
             boardGridItems[index].innerHTML = `${currentTurn.token}`;
             console.log(`${currentTurn.name} wins all`);
             currentTurn.score ++;
@@ -308,9 +310,7 @@ const checkWinningConditions = () => {
         } 
         
     });
-    if (boardGridItems.every(e => e.textContent.length > 0)){
-        gameStatusHeader.textContent = `Well shit, it's a tie.`
-    }
+    
 }
 
 createModeSwitches();
