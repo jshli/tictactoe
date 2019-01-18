@@ -13,19 +13,21 @@ const gameStatusHeader = document.querySelector('#game-instructions__header');
 const scoreBoardWrap = document.querySelector('.score-board__wrap');
 const newGameBtn = document.querySelector('#new-game-btn');
 const settingsPage = document.querySelector('#settings-section');
-
+const gameSwitchWrapper = document.querySelector('.game-mode-switch__wrapper');
+const settingsButton = document.querySelector('#settings-btn');
+const closeSettingsButton = document.querySelector('#close-btn');
 
 const gameModes = [
     {
-        name:"normal", 
+        name:"Normal", 
         instructions: "Just normal fucking tic tac toe. Get three in a row to win."
     },
     {
-        name:"nineXNine",
+        name:"9x9",
         instructions: "Win a small box to claim a big box. Get three big boxes in a row. Fucking easy."
     },
     {
-        name: "blind",
+        name: "Blind",
         instructions:"Let's see you try winning when you can't see shit."
     }
 ];
@@ -55,6 +57,38 @@ randomNameGenerator = () => {
     playerTwo.name = randomNames[Math.floor(Math.random()*randomNames.length)];
 }
 
+settingsButton.addEventListener('click', function(){
+    settingsPage.style.transform = "translateY(0%)";
+})
+
+closeSettingsButton.addEventListener('click', function(){
+    settingsPage.style.transform = "translateY(120%)";
+})
+
+const createModeSwitches = () => {
+    gameModes.forEach(function(el){
+       let modeSwitch = document.createElement('button');
+        modeSwitch.classList.add('mode-switch');
+        modeSwitch.textContent = el.name;
+        console.log(el)
+        if (el === currentMode){
+            modeSwitch.classList.add('mode-switch--active')
+        }
+        gameSwitchWrapper.appendChild(modeSwitch);
+        modeSwitch.addEventListener('click',switchGameMode)
+    })
+}
+
+function switchGameMode() {
+    currentMode = gameModes[gameModes.findIndex(e => e.name === event.target.textContent)];
+    document.querySelectorAll('.mode-switch').forEach(function(el){
+        if (el.textContent === currentMode.name){
+            el.classList.add('mode-switch--active')
+        } else {
+            el.classList.remove('mode-switch--active')
+        }
+    })
+}
 
 
 nameInputForm.addEventListener('submit',function(event){
@@ -276,6 +310,7 @@ const checkWinningConditions = () => {
     }
 }
 
+createModeSwitches();
 const startGame = () => {
     turnCount = 0;
     boardWrapper.classList.remove('board-wrapper--complete')
@@ -295,7 +330,6 @@ const startGame = () => {
     playerTwoScore.textContent = `${playerTwo.name}: ${playerTwo.score}`;
     gameStatusHeader.textContent = `${currentMode.instructions}`;
 }
-
 
 
 document.querySelector('#normal-mode__btn').addEventListener('click', function(){
@@ -327,6 +361,7 @@ const resetGame = () => {
 };
 
 resetButton.addEventListener('click', resetGame)
-// newGameBtn.addEventListener('click', function(){
-//     startGame();
-// });
+newGameBtn.addEventListener('click', function(){
+    settingsPage.style.transform = 'translateY(100%)';
+    startGame();
+});

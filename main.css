@@ -3,12 +3,12 @@
 
 }
 
-h1, h2, input, p, button, .board__grid-item, .score-board__wrap{
+h1, h2, h3, input, p, button, .board__grid-item, .score-board__wrap{
     font-family: 'Montserrat', sans-serif;
 
 }
 
-h2 {
+h3 {
     font-size: 1.5rem;
 }
 
@@ -100,6 +100,7 @@ section {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 h1 {
@@ -165,7 +166,19 @@ h1 {
     background-color: white;
     height: 100%;
     width: 100%;
+    /* visibility: hidden; */
+}
 
+#settings-section {
+    text-align: center;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 3;
+    background-color: white;
+    transform: translateY(120%);
+    transition: all ease-out 0.5s;
+    box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.25);
 }
 
 i {
@@ -182,7 +195,11 @@ i {
     visibility: hidden
 }
 
-.carousel {
+.carousel-control-prev-icon {
+    visibility: hidden
+}
+
+.carousel-item {
     min-height: 100px;
     padding-top: 3rem;
     padding-bottom: 3rem;
@@ -220,4 +237,54 @@ button:hover {
 
 button:focus {
     outline:none;
+}
+
+.game-mode-switch__wrapper {
+    margin: 2rem 0;
+}
+.mode-switch {
+    margin: 0 !important;
+    border: 2px solid var(--light-blue);
+    font-size: 1rem;
+    font-weight: normal;
+    background:none;
+    padding: 0.5rem 1rem;
+    transition: all ease 0.2s;
+}
+
+.mode-switch:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-right:none;
+};
+
+.mode-switch:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-left: none;
+}
+
+.mode-switch:hover{
+    color:white;
+}
+
+.mode-switch--active {
+    background-color: var(--light-blue);
+    color: white;
+}
+
+.settings-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    color: lightgrey;
+    transform: all ease 0.5s
+}
+
+.settings-btn:hover {
+    transform: rotateX(360);
+    color: grey;
+    background: none;
+
 }
