@@ -59,10 +59,12 @@ randomNameGenerator = () => {
 
 settingsButton.addEventListener('click', function(){
     settingsPage.style.transform = "translateY(0%)";
+    closeSettingsButton.style.visibility = "visible";
 })
 
 closeSettingsButton.addEventListener('click', function(){
     settingsPage.style.transform = "translateY(120%)";
+    
 })
 
 const createModeSwitches = () => {
@@ -80,6 +82,7 @@ const createModeSwitches = () => {
 }
 
 function switchGameMode() {
+    closeSettingsButton.style.visibility = "hidden";
     currentMode = gameModes[gameModes.findIndex(e => e.name === event.target.textContent)];
     document.querySelectorAll('.mode-switch').forEach(function(el){
         if (el.textContent === currentMode.name){
